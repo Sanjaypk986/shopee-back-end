@@ -1,28 +1,22 @@
 const mongoose = require('mongoose');
 
-const productItemSchema = mongoose.Schema(
-  {
-    globalProducts:{
-      products: [productItemSchema], // Array of product items
+// Define the Cart Schema containing an array of products
+const cartSchema = new mongoose.Schema({
+  products: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product', // Reference to the Product model
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
     },
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product', // Reference to the Product model
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      default: 1, // Default to 1 unit
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
-      default: 0, // Calculate based on quantity * price
-    },
-  },
-);
+  ],
+});
 
-const GlobalProducts = mongoose.model('GlobalProducts', globalProductsSchema);
-
-module.exports = GlobalProducts;
+const Cart = mongoose.model('Cart', cartSchema);
+module.exports = Cart;
