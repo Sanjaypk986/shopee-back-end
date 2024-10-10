@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const productItemSchema = mongoose.Schema(
+const productSchema = mongoose.Schema(
   {
     globalProducts:{
       products: [productItemSchema], // Array of product items
@@ -23,6 +23,6 @@ const productItemSchema = mongoose.Schema(
   },
 );
 
-const GlobalProducts = mongoose.model('GlobalProducts', globalProductsSchema);
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = GlobalProducts;
+module.exports = Product;
