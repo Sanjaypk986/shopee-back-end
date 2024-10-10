@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 // Define the schema for products
 const productSchema = mongoose.Schema(
@@ -12,19 +12,17 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    countInStock: {
+    quantity: {
       type: Number,
       required: true,
       default: 0,
     },
     imageUrl: {
       type: String,
-      required: true,
+      default:"https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"
     },
   },
 );
 
 // Export the model to be used in the app
-const Product = mongoose.model('Product', productSchema);
-
-module.exports = Product;
+export  const Product = mongoose.model('Product', productSchema);
