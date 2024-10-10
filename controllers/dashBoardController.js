@@ -1,7 +1,7 @@
 // create product
 export const productCreate = async (req, res) => {
   try {
-    const { name, price, quantity,image} = req.body; //get datas from body
+    const { name, price, quantity, image } = req.body; //get datas from body
     if (!name || !price || !quantity) {
       return res
         .status(400)
@@ -12,7 +12,7 @@ export const productCreate = async (req, res) => {
       name,
       price,
       quantity,
-      image
+      image,
     });
     await newProduct.save(); //save
     res.status(200).json({
@@ -102,6 +102,27 @@ export const TotalSalesAmount = async (req, res) => {
       success: true,
       message: "cart total fetched successfully",
       data: TotalAmount,
+    });
+  } catch (error) {
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || "Internal server error" });
+  }
+};
+
+// total Products
+export const TotalProducts = async (req, res) => {
+  try {
+    const products = await Product.find({}); //fetch all products
+    if (!products || products.length === 0) {
+      return res
+        .status(400)
+        .json({ sucess: false, message: "products not available" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "All products fetched successfully",
+      data: products,
     });
   } catch (error) {
     res
