@@ -1,7 +1,9 @@
+import { Product } from './../models/productModel.js';
+
 // create product
 export const productCreate = async (req, res) => {
   try {
-    const { name, price, quantity, image } = req.body; //get datas from body
+    const { name, price, quantity, imageUrl } = req.body; //get datas from body
     if (!name || !price || !quantity) {
       return res
         .status(400)
@@ -12,12 +14,12 @@ export const productCreate = async (req, res) => {
       name,
       price,
       quantity,
-      image,
+      imageUrl,
     });
     await newProduct.save(); //save
     res.status(200).json({
       success: true,
-      message: "Address created successfully",
+      message: "Product created successfully",
       data: newProduct,
     });
   } catch (error) {
