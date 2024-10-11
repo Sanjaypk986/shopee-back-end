@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Define the Cart Schema containing an array of products
 const cartSchema = new mongoose.Schema({
@@ -23,6 +23,4 @@ const cartSchema = new mongoose.Schema({
   ],
 });
 
-
-const Cart = mongoose.model('Cart', cartSchema);
-export default Cart
+export const Cart = mongoose.model('Cart', cartSchema);
