@@ -1,16 +1,24 @@
 const Cart = require('../models/cartModel.js');
+const Product = require('../models/productModel');
+
 
 // Add product to cart
 export const addProductToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
 
+    const product = await Product.findById(productId)
+    
+    if(!product){
+        return res.status(404).json({message : "Product not found"})
+    }
+
     let cart = await Cart.findOne();
 
     if (!cart) {
       // If cart doesn't exist, create a new one
       cart = new Cart({
-        products: [{ productId, quantity }],
+        products: [{ productId, quantity,totalPrice : product.price * quantity }],
       });
 
     } else {
@@ -20,9 +28,10 @@ export const addProductToCart = async (req, res) => {
       if (productIndex > -1) {
         // If the product exists, update its quantity
         cart.products[productIndex].quantity += quantity;
+        cart.products[productIndex].totalPrice += product.price * quantity;
       } else {
         // Otherwise, add the product to the cart
-        cart.products.push({ productId, quantity });
+        cart.products.push({ productId, quantity, totalPrice : product.price * quantity });
       }
     }
     await cart.save();
