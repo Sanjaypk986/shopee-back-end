@@ -25,4 +25,5 @@ const productSchema = mongoose.Schema(
 );
 
 // Export the model to be used in the app
-export  const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
+export default Product
