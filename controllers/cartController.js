@@ -1,5 +1,5 @@
-const Cart = require('../models/cartModel.js');
-const Product = require('../models/productModel');
+import Cart from '../models/cartModel.js'
+import Product from '../models/productModel.js';
 
 
 // Add product to cart
@@ -40,3 +40,17 @@ export const addProductToCart = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error adding product to cart', error });
   }
 };
+
+// Get all products from cart
+export const getAllCartItems = async (req, res) => {
+  try {
+    const cartItems = await Cart.find().populate({
+      path: 'products.productId', // Path to populate
+      select: 'name price', // Select only the 'name' field from the Product model
+    });
+    res.status(200).json({success : true, cartItems})
+  } catch (error) {
+    console.log("Error fetching cart items : ", error);
+  }
+}
+
