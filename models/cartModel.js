@@ -1,11 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-<<<<<<< HEAD
-const productSchema = mongoose.Schema(
-  {
-    globalProducts:{
-      products: [productItemSchema], // Array of product items
-=======
 // Define the Cart Schema containing an array of products
 const cartSchema = new mongoose.Schema({
   products: [
@@ -25,16 +19,10 @@ const cartSchema = new mongoose.Schema({
         required: true,
         default: 0, // Total price for this product based on quantity * price
       },
->>>>>>> d5ab5e2cf33bc95f0487afa919afe61cd4d2f0f3
     },
   ],
 });
 
-<<<<<<< HEAD
-const Product = mongoose.model('Product', productSchema);
 
-module.exports = Product;
-=======
 const Cart = mongoose.model('Cart', cartSchema);
-module.exports = Cart;
->>>>>>> d5ab5e2cf33bc95f0487afa919afe61cd4d2f0f3
+export default Cart
