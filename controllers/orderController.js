@@ -1,8 +1,7 @@
 // create order
-
-import { Cart } from "../models/cartModel";
-import { Order } from "../models/orderModel";
-import { Product } from "../models/productModel";
+import  Cart  from "../models/cartModel.js";
+import Order  from "../models/orderModel.js";
+import  Product from "../models/productModel.js";
 
 export const orderCreate = async (req, res) => {
   try {
