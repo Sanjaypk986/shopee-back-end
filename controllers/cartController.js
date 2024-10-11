@@ -1,5 +1,3 @@
-const Cart = require("../models/cartModel.js");
-const Product = require("../models/productModel");
 import Cart from '../models/cartModel.js'
 import Product from '../models/productModel.js';
 
