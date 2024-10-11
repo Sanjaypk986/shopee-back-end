@@ -1,4 +1,5 @@
-import { Product } from './../models/productModel.js';
+import { Cart } from "../models/cartModel.js";
+import { Product } from "./../models/productModel.js";
 
 // create product
 export const productCreate = async (req, res) => {
@@ -33,6 +34,7 @@ export const productCreate = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { productId } = req.body;
+    
     if (!productId) {
       return res.status(400).json({
         sucess: false,
@@ -60,55 +62,73 @@ export const deleteProduct = async (req, res) => {
 
 // UpdateQuantity
 export const UpdateQuantity = async (req, res) => {
-  try {
-    const { productId, quantity } = req.body; //get data from body
-    if (!productId || !quantity) {
-      return res.status(400).json({
-        sucess: false,
-        message: "quantity or productId not available",
+    try {
+      const { productId, quantity } = req.body;
+  
+      if (!productId || !quantity) {
+        return res.status(400).json({
+          success: false,
+          message: "quantity or productId not provided",
+        });
+      }
+  
+      const product = await Product.findByIdAndUpdate(
+        productId,
+        { quantity },
+        { new: true } 
+      );
+  
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Product quantity updated successfully",
+        data: product,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Internal server error",
       });
     }
-    const product = await Product.findById(productId); //find using id
-    if (!product) {
-      return res
-        .status(400)
-        .json({ sucess: false, message: "Product not available" });
-    }
-    product.quantity = quantity; //update quantity
-    await product.save();
-    return res.status(200).json({
-      success: true,
-      message: "Product quantity updated successfully",
-      data: product,
-    });
-  } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ message: error.message || "Internal server error" });
-  }
-};
+  };
+  
 
 // Total sales amount
 export const TotalSalesAmount = async (req, res) => {
   try {
-    const cart = await Cart.find({}); //fetch all cart
-    if (!cart || cart.length === 0) {
+    const carts = await Cart.find({});
+    if (!carts || carts.length === 0) {
       return res
-        .status(400)
-        .json({ sucess: false, message: "cart not available" });
+        .status(404)
+        .json({ success: false, message: "No cart items available" });
     }
-    const TotalAmount = cart.reduce((acc, sale) => {
-      return acc + sale.total; //calculating total amount of sales
-    }, 0);
+
+    let totalAmount = 0;
+
+    carts.forEach((cart) => {
+      cart.products.forEach((product) => {
+        totalAmount += product.totalPrice;
+      });
+    });
+
     return res.status(200).json({
       success: true,
-      message: "cart total fetched successfully",
-      data: TotalAmount,
+      message: "Total sales amount fetched successfully",
+      data: totalAmount,
     });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ message: error.message || "Internal server error" });
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
   }
 };
 
